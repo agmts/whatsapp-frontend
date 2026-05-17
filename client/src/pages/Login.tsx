@@ -16,12 +16,18 @@ export default function Login() {
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
+    console.log('Login handler called');
 
     try {
+      console.log('Calling apiClient.login...');
       await apiClient.login(username, password);
+      console.log('Login successful, showing toast and redirecting...');
       toast.success('Login successful');
+      console.log('About to redirect to /dashboard');
       setLocation('/dashboard');
+      console.log('Redirect called');
     } catch (error) {
+      console.error('Login error:', error);
       toast.error('Login failed. Please check your credentials.');
       console.error(error);
     } finally {
@@ -81,7 +87,7 @@ export default function Login() {
         </form>
 
         <p className="text-xs text-muted-foreground text-center mt-6">
-          Default credentials: admin / admin123
+          Use: admin / CamelDelvey
         </p>
       </Card>
     </div>
