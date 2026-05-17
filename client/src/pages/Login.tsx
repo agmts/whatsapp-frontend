@@ -24,6 +24,8 @@ export default function Login() {
       console.log('Login successful, showing toast and redirecting...');
       toast.success('Login successful');
       console.log('About to redirect to /dashboard');
+      // Add a small delay to ensure token is persisted before redirecting
+      await new Promise(resolve => setTimeout(resolve, 100));
       setLocation('/dashboard');
       console.log('Redirect called');
     } catch (error) {
