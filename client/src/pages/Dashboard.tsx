@@ -292,8 +292,7 @@ function DashboardContent() {
         )}
       </div>
     </div>
-    );
-  }
+  );
 }
 
 export default function Dashboard() {
