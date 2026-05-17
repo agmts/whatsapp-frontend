@@ -30,10 +30,8 @@ function DashboardContent() {
       } catch (error) {
         console.error('Failed to fetch conversations:', error);
         console.error('Error details:', (error as any).message);
-        if ((error as any).message === 'Failed to fetch conversations') {
-          toast.error('Session expired. Please login again.');
-          setLocation('/');
-        }
+        setLoading(false);
+        toast.error('Failed to load conversations. Check backend connection.');
       }
     };
 
