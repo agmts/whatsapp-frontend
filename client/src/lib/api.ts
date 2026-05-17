@@ -92,29 +92,53 @@ class APIClient {
   }
 
   async getConversations(): Promise<Conversation[]> {
-    const response = await fetch(`${API_BASE_URL}/api/conversations`, {
-      method: 'GET',
-      headers: this.getHeaders(),
-    });
+    try {
+      console.log('getConversations: Fetching from', `${API_BASE_URL}/api/conversations`);
+      const response = await fetch(`${API_BASE_URL}/api/conversations`, {
+        method: 'GET',
+        headers: this.getHeaders(),
+      });
 
-    if (!response.ok) {
-      throw new Error('Failed to fetch conversations');
+      console.log('getConversations: Response status', response.status);
+
+      if (!response.ok) {
+        const errorText = await response.text();
+        console.error('getConversations: Error response', response.status, errorText);
+        throw new Error(`Failed to fetch conversations: ${response.status} ${errorText}`);
+      }
+
+      const data = await response.json();
+      console.log('getConversations: Success, got', data.length, 'conversations');
+      return data;
+    } catch (error) {
+      console.error('getConversations: Exception', error);
+      throw error;
     }
-
-    return response.json();
   }
 
   async getHistory(senderId: string): Promise<ConversationDetail> {
-    const response = await fetch(`${API_BASE_URL}/api/history/${senderId}`, {
-      method: 'GET',
-      headers: this.getHeaders(),
-    });
+    try {
+      console.log('getHistory: Fetching for sender', senderId);
+      const response = await fetch(`${API_BASE_URL}/api/history/${senderId}`, {
+        method: 'GET',
+        headers: this.getHeaders(),
+      });
 
-    if (!response.ok) {
-      throw new Error('Failed to fetch history');
+      console.log('getHistory: Response status', response.status);
+
+      if (!response.ok) {
+        const errorText = await response.text();
+        console.error('getHistory: Error response', response.status, errorText);
+        throw new Error(`Failed to fetch history: ${response.status}`);
+      }
+
+      const data = await response.json();
+      console.log('getHistory: Success');
+      return data;
+    } catch (error) {
+      console.error('getHistory: Exception', error);
+      throw error;
     }
-
-    return response.json();
   }
 
   async sendMessage(sender: string, message: string): Promise<{ status: string; message: string }> {
