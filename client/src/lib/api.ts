@@ -60,24 +60,35 @@ class APIClient {
   }
 
   async login(username: string, password: string): Promise<{ access_token: string; token_type: string }> {
-    const response = await fetch(`${API_BASE_URL}/token`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        sender: username,
-        message: password,
-      }),
-    });
+    try {
+      console.log('Attempting login to:', `${API_BASE_URL}/token`);
+      const response = await fetch(`${API_BASE_URL}/token`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          sender: username,
+          message: password,
+        }),
+      });
 
-    if (!response.ok) {
-      throw new Error('Login failed');
+      console.log('Response status:', response.status);
+
+      if (!response.ok) {
+        const errorText = await response.text();
+        console.error('Login error response:', errorText);
+        throw new Error(`Login failed: ${response.status} ${errorText}`);
+      }
+
+      const data = await response.json();
+      console.log('Login successful, token received');
+      this.setToken(data.access_token);
+      return data;
+    } catch (error) {
+      console.error('Login error:', error);
+      throw error;
     }
-
-    const data = await response.json();
-    this.setToken(data.access_token);
-    return data;
   }
 
   async getConversations(): Promise<Conversation[]> {
