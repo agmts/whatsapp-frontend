@@ -24,10 +24,8 @@ export default function Login() {
       console.log('Login successful, showing toast and redirecting...');
       toast.success('Login successful');
       console.log('About to redirect to /dashboard');
-      // Add a small delay to ensure token is persisted before redirecting
-      await new Promise(resolve => setTimeout(resolve, 100));
-      // Use hard redirect instead of wouter routing
-      window.location.href = '/dashboard';
+      // Use wouter routing for client-side navigation
+      setLocation('/dashboard');
       console.log('Redirect called');
     } catch (error) {
       console.error('Login error:', error);

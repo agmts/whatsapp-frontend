@@ -17,6 +17,19 @@ function DashboardContent() {
   const [messageInput, setMessageInput] = useState('');
   const [loading, setLoading] = useState(true);
   const [sending, setSending] = useState(false);
+  const [isAuthenticated, setIsAuthenticated] = useState(true);
+
+  // Check authentication on mount
+  useEffect(() => {
+    const token = apiClient.getToken();
+    if (!token) {
+      console.log('No token found, redirecting to login');
+      setIsAuthenticated(false);
+      setLocation('/');
+      return;
+    }
+    console.log('Token found, user is authenticated');
+  }, [setLocation]);
 
   // Fetch conversations on mount and set up polling
   useEffect(() => {
@@ -118,6 +131,16 @@ function DashboardContent() {
     apiClient.clearToken();
     setLocation('/');
   };
+
+  if (!isAuthenticated) {
+    return (
+      <div className="flex items-center justify-center min-h-screen bg-background">
+        <div className="text-center">
+          <p className="text-muted-foreground">Redirecting to login...</p>
+        </div>
+      </div>
+    );
+  }
 
   if (loading) {
     return (
