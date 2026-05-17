@@ -6,6 +6,7 @@ import { Card } from '@/components/ui/card';
 import { apiClient } from '@/lib/api';
 import { toast } from 'sonner';
 
+// Force rebuild to pick up VITE_API_URL environment variable
 export default function Login() {
   const [, setLocation] = useLocation();
   const [username, setUsername] = useState('admin');
