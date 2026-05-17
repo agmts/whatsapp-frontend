@@ -21,11 +21,14 @@ export default function Dashboard() {
   useEffect(() => {
     const fetchConversations = async () => {
       try {
+        console.log('Fetching conversations...');
         const data = await apiClient.getConversations();
+        console.log('Conversations fetched:', data);
         setConversations(data);
         setLoading(false);
       } catch (error) {
         console.error('Failed to fetch conversations:', error);
+        console.error('Error details:', (error as any).message);
         if ((error as any).message === 'Failed to fetch conversations') {
           toast.error('Session expired. Please login again.');
           setLocation('/');
@@ -33,6 +36,7 @@ export default function Dashboard() {
       }
     };
 
+    console.log('Dashboard mounted, fetching conversations...');
     fetchConversations();
     const interval = setInterval(fetchConversations, 4000); // Poll every 4 seconds
 
