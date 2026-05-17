@@ -9,6 +9,7 @@ import Dashboard from "./pages/Dashboard";
 
 
 function Router() {
+  console.log('Router component rendering');
   return (
     <Switch>
       <Route path="" component={Login} />
