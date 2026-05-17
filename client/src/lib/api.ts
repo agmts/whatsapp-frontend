@@ -3,7 +3,7 @@
  * Handles authentication and communication with backend API
  */
 
-const API_BASE_URL = process.env.VITE_API_URL || 'http://localhost:8000';
+const API_BASE_URL = 'https://web-production-0a1b2.up.railway.app';
 
 export interface Conversation {
   id: number;
@@ -61,7 +61,7 @@ class APIClient {
 
   async login(username: string, password: string): Promise<{ access_token: string; token_type: string }> {
     try {
-      console.log('Attempting login to:', `${API_BASE_URL}/token`);
+      console.log('Attempting login to:', `${API_BASE_URL}/token`, 'API_BASE_URL:', API_BASE_URL);
       const response = await fetch(`${API_BASE_URL}/token`, {
         method: 'POST',
         headers: {
@@ -73,7 +73,7 @@ class APIClient {
         }),
       });
 
-      console.log('Response status:', response.status);
+      console.log('Response status:', response.status, 'URL was:', `${API_BASE_URL}/token`);
 
       if (!response.ok) {
         const errorText = await response.text();
@@ -82,11 +82,11 @@ class APIClient {
       }
 
       const data = await response.json();
-      console.log('Login successful, token received');
+      console.log('Login successful! Token received from:', `${API_BASE_URL}/token`);
       this.setToken(data.access_token);
       return data;
     } catch (error) {
-      console.error('Login error:', error);
+      console.error('Login error from', `${API_BASE_URL}/token`, ':', error);
       throw error;
     }
   }
