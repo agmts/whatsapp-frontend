@@ -135,9 +135,6 @@
   }
 }
 
-@layer base {
-}
-
 @layer components {
   /**
    * Custom container utility that centers content and adds responsive padding.
@@ -179,7 +176,6 @@
       max-width: 1280px; /* Standard content width */
     }
   }
-}
 
   /* Warm Minimalist Component Styles */
   .conversation-card {
