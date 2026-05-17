@@ -8,8 +8,9 @@ import { Separator } from '@/components/ui/separator';
 import { apiClient, Conversation, ConversationDetail, Message } from '@/lib/api';
 import { toast } from 'sonner';
 import { Send, LogOut, MessageCircle, User } from 'lucide-react';
+import DashboardErrorBoundary from '@/components/DashboardErrorBoundary';
 
-export default function Dashboard() {
+function DashboardContent() {
   const [, setLocation] = useLocation();
   const [conversations, setConversations] = useState<Conversation[]>([]);
   const [selectedConversation, setSelectedConversation] = useState<ConversationDetail | null>(null);
@@ -126,6 +127,7 @@ export default function Dashboard() {
         <div className="text-center">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-accent mx-auto mb-4" />
           <p className="text-muted-foreground">Loading conversations...</p>
+          <p className="text-xs text-muted-foreground mt-2">Check console for details</p>
         </div>
       </div>
     );
@@ -289,6 +291,14 @@ export default function Dashboard() {
           </div>
         )}
       </div>
-    </div>
+    );
+  }
+}
+
+export default function Dashboard() {
+  return (
+    <DashboardErrorBoundary>
+      <DashboardContent />
+    </DashboardErrorBoundary>
   );
 }
