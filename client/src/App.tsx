@@ -15,6 +15,6 @@ export default function App() {
   },
   h('div', null,
     h('h1', null, 'WhatsApp Dashboard'),
-    h('p', null, 'React app is working!')
+    h('p', null, 'Login Form Coming Soon')
   ));
 }
