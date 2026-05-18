@@ -1,45 +1,20 @@
-import { Toaster } from "@/components/ui/sonner";
-import { TooltipProvider } from "@/components/ui/tooltip";
-import NotFound from "@/pages/NotFound";
-import { Route, Switch, useLocation } from "wouter";
-import ErrorBoundary from "./components/ErrorBoundary";
-import { ThemeProvider } from "./contexts/ThemeContext";
-import Login from "./pages/Login";
-import Dashboard from "./pages/Dashboard";
+import { createElement as h } from 'react';
 
-
-function Router() {
-  const [location] = useLocation();
-  console.log('Router component rendering, current location:', location);
-  return (
-    <Switch>
-      <Route path="" component={Login} />
-      <Route path="/dashboard" component={Dashboard} />
-      <Route path="/404" component={NotFound} />
-      {/* Final fallback route */}
-      <Route component={NotFound} />
-    </Switch>
-  );
+export default function App() {
+  return h('div', {
+    style: {
+      padding: '2rem',
+      textAlign: 'center',
+      backgroundColor: '#0F1419',
+      color: '#E8E4DF',
+      minHeight: '100vh',
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center',
+    },
+  },
+  h('div', null,
+    h('h1', null, 'WhatsApp Dashboard'),
+    h('p', null, 'React app is working!')
+  ));
 }
-
-// NOTE: About Theme
-// - First choose a default theme according to your design style (dark or light bg), than change color palette in index.css
-//   to keep consistent foreground/background color across components
-// - If you want to make theme switchable, pass `switchable` ThemeProvider and use `useTheme` hook
-
-function App() {
-  return (
-    <ErrorBoundary>
-      <ThemeProvider
-        defaultTheme="dark"
-      >
-        <TooltipProvider>
-          <Toaster />
-          <Router />
-        </TooltipProvider>
-      </ThemeProvider>
-    </ErrorBoundary>
-  );
-}
-
-export default App;

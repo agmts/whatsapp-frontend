@@ -1,24 +1,17 @@
 import { useState, useEffect } from 'react';
 import { useLocation } from 'wouter';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Card } from '@/components/ui/card';
 import { apiClient } from '@/lib/api';
 import { toast } from 'sonner';
 
-// Force rebuild to pick up VITE_API_URL environment variable
 export default function Login() {
   const [location, setLocation] = useLocation();
-  console.log('Login component mounted, current location:', location);
   const [username, setUsername] = useState('admin');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
   const [shouldRedirect, setShouldRedirect] = useState(false);
 
-  // Handle redirect after login
   useEffect(() => {
     if (shouldRedirect) {
-      console.log('useEffect: shouldRedirect is true, calling setLocation');
       setLocation('/dashboard');
     }
   }, [shouldRedirect, setLocation]);
@@ -26,21 +19,13 @@ export default function Login() {
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
-    console.log('Login handler called');
 
     try {
-      console.log('Calling apiClient.login...');
       const result = await apiClient.login(username, password);
-      console.log('Login successful, token:', result.access_token);
-      console.log('Token stored in localStorage:', localStorage.getItem('dashboard_token'));
       toast.success('Login successful');
-      console.log('About to redirect to /dashboard');
-      // Set flag to trigger redirect in useEffect
-      console.log('Setting shouldRedirect to true');
       setShouldRedirect(true);
     } catch (error) {
       console.error('Login error:', error);
-      console.error('Error details:', (error as any).message);
       toast.error('Login failed. Please check your credentials.');
     } finally {
       setLoading(false);
@@ -48,62 +33,161 @@ export default function Login() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-background">
+    <div style={{
+      minHeight: '100vh',
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center',
+      backgroundColor: '#0F1419',
+      position: 'relative',
+    }}>
       {/* Subtle gradient background */}
-      <div className="absolute inset-0 opacity-5" style={{
+      <div style={{
+        position: 'absolute',
+        inset: 0,
+        opacity: 0.05,
         backgroundImage: 'radial-gradient(circle at 20% 50%, #D4AF37 0%, transparent 50%), radial-gradient(circle at 80% 80%, #8B7355 0%, transparent 50%)',
+        pointerEvents: 'none',
       }} />
 
-      <Card className="relative w-full max-w-md p-8 shadow-2xl border border-accent/20">
-        <div className="mb-8 text-center">
-          <div className="inline-flex items-center justify-center w-12 h-12 rounded-lg bg-accent/10 mb-4">
-            <div className="w-6 h-6 bg-accent rounded-full" />
+      <div style={{
+        position: 'relative',
+        width: '100%',
+        maxWidth: '28rem',
+        padding: '2rem',
+        backgroundColor: '#1A1F2E',
+        borderRadius: '0.5rem',
+        boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.25)',
+        border: '1px solid rgba(212, 175, 55, 0.2)',
+      }}>
+        <div style={{ marginBottom: '2rem', textAlign: 'center' }}>
+          <div style={{
+            display: 'inline-flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            width: '3rem',
+            height: '3rem',
+            borderRadius: '0.5rem',
+            backgroundColor: 'rgba(212, 175, 55, 0.1)',
+            marginBottom: '1rem',
+          }}>
+            <div style={{
+              width: '1.5rem',
+              height: '1.5rem',
+              backgroundColor: '#D4AF37',
+              borderRadius: '50%',
+            }} />
           </div>
-          <h1 className="text-3xl font-bold text-foreground mb-2">WhatsApp Dashboard</h1>
-          <p className="text-sm text-muted-foreground">Premium Monitoring & Management</p>
+          <h1 style={{
+            fontSize: '1.875rem',
+            fontWeight: 'bold',
+            color: '#E8E4DF',
+            marginBottom: '0.5rem',
+          }}>WhatsApp Dashboard</h1>
+          <p style={{
+            fontSize: '0.875rem',
+            color: '#A8A39E',
+          }}>Premium Monitoring & Management</p>
         </div>
 
-        <form onSubmit={handleLogin} className="space-y-4">
+        <form onSubmit={handleLogin} style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
           <div>
-            <label className="block text-sm font-medium text-foreground mb-2">
+            <label style={{
+              display: 'block',
+              fontSize: '0.875rem',
+              fontWeight: '500',
+              color: '#E8E4DF',
+              marginBottom: '0.5rem',
+            }}>
               Username
             </label>
-            <Input
+            <input
               type="text"
               value={username}
               onChange={(e) => setUsername(e.target.value)}
               placeholder="Enter username"
               disabled={loading}
+              style={{
+                width: '100%',
+                padding: '0.75rem',
+                backgroundColor: '#1A1F2E',
+                border: '1px solid #2A3142',
+                borderRadius: '0.375rem',
+                color: '#E8E4DF',
+                fontSize: '0.875rem',
+              }}
             />
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-foreground mb-2">
+            <label style={{
+              display: 'block',
+              fontSize: '0.875rem',
+              fontWeight: '500',
+              color: '#E8E4DF',
+              marginBottom: '0.5rem',
+            }}>
               Password
             </label>
-            <Input
+            <input
               type="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               placeholder="Enter password"
               disabled={loading}
               autoComplete="current-password"
+              style={{
+                width: '100%',
+                padding: '0.75rem',
+                backgroundColor: '#1A1F2E',
+                border: '1px solid #2A3142',
+                borderRadius: '0.375rem',
+                color: '#E8E4DF',
+                fontSize: '0.875rem',
+              }}
             />
           </div>
 
-          <Button
+          <button
             type="submit"
-            className="w-full bg-accent hover:bg-accent/80 text-accent-foreground font-semibold transition-all duration-200"
             disabled={loading}
+            style={{
+              width: '100%',
+              padding: '0.75rem',
+              backgroundColor: '#D4AF37',
+              color: '#0F1419',
+              border: 'none',
+              borderRadius: '0.375rem',
+              fontSize: '1rem',
+              fontWeight: '600',
+              cursor: loading ? 'not-allowed' : 'pointer',
+              opacity: loading ? 0.7 : 1,
+              transition: 'all 200ms ease-out',
+            }}
+            onMouseEnter={(e) => {
+              if (!loading) {
+                (e.target as HTMLButtonElement).style.backgroundColor = '#C9A961';
+              }
+            }}
+            onMouseLeave={(e) => {
+              if (!loading) {
+                (e.target as HTMLButtonElement).style.backgroundColor = '#D4AF37';
+              }
+            }}
           >
             {loading ? 'Logging in...' : 'Login'}
-          </Button>
+          </button>
         </form>
 
-        <p className="text-xs text-muted-foreground text-center mt-6">
+        <p style={{
+          fontSize: '0.75rem',
+          color: '#A8A39E',
+          textAlign: 'center',
+          marginTop: '1.5rem',
+        }}>
           Use: admin / CamelDelvey
         </p>
-      </Card>
+      </div>
     </div>
   );
 }
