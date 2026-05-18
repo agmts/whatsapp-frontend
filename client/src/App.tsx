@@ -1,21 +1,17 @@
 import { Toaster } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import NotFound from "@/pages/NotFound";
-import { Route, Switch, useLocation } from "wouter";
+import { Route, Switch } from "wouter";
 import ErrorBoundary from "./components/ErrorBoundary";
 import { ThemeProvider } from "./contexts/ThemeContext";
-import Login from "./pages/Login";
-import Dashboard from "./pages/Dashboard";
+import Home from "./pages/Home";
 
 
 function Router() {
-  const [location] = useLocation();
-  console.log('Router component rendering, current location:', location);
   return (
     <Switch>
-      <Route path="" component={Login} />
-      <Route path="/dashboard" component={Dashboard} />
-      <Route path="/404" component={NotFound} />
+      <Route path={"/"} component={Home} />
+      <Route path={"/404"} component={NotFound} />
       {/* Final fallback route */}
       <Route component={NotFound} />
     </Switch>
@@ -32,6 +28,7 @@ function App() {
     <ErrorBoundary>
       <ThemeProvider
         defaultTheme="light"
+        // switchable
       >
         <TooltipProvider>
           <Toaster />
