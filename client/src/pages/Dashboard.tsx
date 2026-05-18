@@ -9,6 +9,7 @@ import { apiClient, Conversation, ConversationDetail, Message } from '@/lib/api'
 import { toast } from 'sonner';
 import { Send, LogOut, MessageCircle, User } from 'lucide-react';
 import DashboardErrorBoundary from '@/components/DashboardErrorBoundary';
+import { useEffect, useState } from 'react';
 
 function DashboardContent() {
   const [, setLocation] = useLocation();
@@ -22,14 +23,14 @@ function DashboardContent() {
   // Check authentication on mount
   useEffect(() => {
     const token = apiClient.getToken();
+    console.log('Dashboard: Checking token, found:', !!token);
+    console.log('Dashboard: localStorage token:', localStorage.getItem('dashboard_token'));
     if (!token) {
-      console.log('No token found, redirecting to login');
-      setIsAuthenticated(false);
-      setLocation('/');
-      return;
+      console.log('Dashboard: No token found, but continuing anyway - will try to load conversations');
+    } else {
+      console.log('Dashboard: Token found, user is authenticated');
     }
-    console.log('Token found, user is authenticated');
-  }, [setLocation]);
+  }, []);
 
   // Fetch conversations on mount and set up polling
   useEffect(() => {

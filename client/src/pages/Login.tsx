@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useLocation } from 'wouter';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -13,6 +13,15 @@ export default function Login() {
   const [username, setUsername] = useState('admin');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
+  const [shouldRedirect, setShouldRedirect] = useState(false);
+
+  // Handle redirect after login
+  useEffect(() => {
+    if (shouldRedirect) {
+      console.log('useEffect: shouldRedirect is true, calling setLocation');
+      setLocation('/dashboard');
+    }
+  }, [shouldRedirect, setLocation]);
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -26,14 +35,9 @@ export default function Login() {
       console.log('Token stored in localStorage:', localStorage.getItem('dashboard_token'));
       toast.success('Login successful');
       console.log('About to redirect to /dashboard');
-      // Use wouter routing for client-side navigation
-      console.log('setLocation is:', typeof setLocation);
-      // Add a small delay to ensure token is fully saved before redirect
-      setTimeout(() => {
-        console.log('Redirecting to dashboard, token in storage:', localStorage.getItem('dashboard_token'));
-        setLocation('/dashboard');
-      }, 100);
-      console.log('Redirect scheduled');
+      // Set flag to trigger redirect in useEffect
+      console.log('Setting shouldRedirect to true');
+      setShouldRedirect(true);
     } catch (error) {
       console.error('Login error:', error);
       console.error('Error details:', (error as any).message);

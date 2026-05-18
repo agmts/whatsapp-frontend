@@ -30,14 +30,21 @@ class APIClient {
   private token: string | null = null;
 
   setToken(token: string) {
+    console.log('APIClient: setToken called with token:', token.substring(0, 20) + '...');
     this.token = token;
     localStorage.setItem('dashboard_token', token);
+    console.log('APIClient: Token saved to localStorage');
+    console.log('APIClient: Verify - localStorage now has:', localStorage.getItem('dashboard_token')?.substring(0, 20) + '...');
   }
 
   getToken(): string | null {
+    console.log('APIClient: getToken called, this.token exists:', !!this.token);
     if (!this.token) {
-      this.token = localStorage.getItem('dashboard_token');
+      const stored = localStorage.getItem('dashboard_token');
+      console.log('APIClient: No in-memory token, checking localStorage:', !!stored);
+      this.token = stored;
     }
+    console.log('APIClient: Returning token:', !!this.token);
     return this.token;
   }
 
