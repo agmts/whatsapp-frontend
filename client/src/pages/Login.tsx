@@ -8,7 +8,8 @@ import { toast } from 'sonner';
 
 // Force rebuild to pick up VITE_API_URL environment variable
 export default function Login() {
-  const [, setLocation] = useLocation();
+  const [location, setLocation] = useLocation();
+  console.log('Login component mounted, current location:', location);
   const [username, setUsername] = useState('admin');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
@@ -20,17 +21,23 @@ export default function Login() {
 
     try {
       console.log('Calling apiClient.login...');
-      await apiClient.login(username, password);
-      console.log('Login successful, showing toast and redirecting...');
+      const result = await apiClient.login(username, password);
+      console.log('Login successful, token:', result.access_token);
+      console.log('Token stored in localStorage:', localStorage.getItem('dashboard_token'));
       toast.success('Login successful');
       console.log('About to redirect to /dashboard');
       // Use wouter routing for client-side navigation
-      setLocation('/dashboard');
-      console.log('Redirect called');
+      console.log('setLocation is:', typeof setLocation);
+      // Add a small delay to ensure token is fully saved before redirect
+      setTimeout(() => {
+        console.log('Redirecting to dashboard, token in storage:', localStorage.getItem('dashboard_token'));
+        setLocation('/dashboard');
+      }, 100);
+      console.log('Redirect scheduled');
     } catch (error) {
       console.error('Login error:', error);
+      console.error('Error details:', (error as any).message);
       toast.error('Login failed. Please check your credentials.');
-      console.error(error);
     } finally {
       setLoading(false);
     }
