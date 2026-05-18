@@ -18,7 +18,13 @@ class ErrorBoundary extends Component<Props, State> {
   }
 
   static getDerivedStateFromError(error: Error): State {
+    console.error('ErrorBoundary caught error:', error);
+    console.error('Error stack:', error.stack);
     return { hasError: true, error };
+  }
+
+  componentDidCatch(error: Error, errorInfo: any) {
+    console.error('Component stack:', errorInfo.componentStack);
   }
 
   render() {
@@ -31,12 +37,20 @@ class ErrorBoundary extends Component<Props, State> {
               className="text-destructive mb-6 flex-shrink-0"
             />
 
-            <h2 className="text-xl mb-4">An unexpected error occurred.</h2>
+            <h2 className="text-2xl font-bold mb-2 text-foreground">An unexpected error occurred</h2>
+            <p className="text-muted-foreground mb-6 text-center">The dashboard encountered an error. Here are the details:</p>
 
-            <div className="p-4 w-full rounded bg-muted overflow-auto mb-6">
-              <pre className="text-sm text-muted-foreground whitespace-break-spaces">
-                {this.state.error?.stack}
-              </pre>
+            <div className="p-4 w-full rounded bg-muted overflow-auto mb-6 max-h-64">
+              <div className="mb-4">
+                <p className="text-sm font-semibold text-foreground mb-2">Error Message:</p>
+                <p className="text-sm text-destructive font-mono">{this.state.error?.message}</p>
+              </div>
+              <div>
+                <p className="text-sm font-semibold text-foreground mb-2">Stack Trace:</p>
+                <pre className="text-xs text-muted-foreground whitespace-pre-wrap break-words font-mono">
+                  {this.state.error?.stack}
+                </pre>
+              </div>
             </div>
 
             <button
