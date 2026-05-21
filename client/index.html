@@ -794,7 +794,7 @@
         const escalationTimer = document.getElementById('escalationTimer');
 
         let currentToken = null;
-        let selectedConversation = null;
+        var selectedConversation = null;
         let escalationState = {};
         let dingAudio = null;
 
@@ -1124,9 +1124,15 @@
             if (!selectedConversation) return;
 
             try {
+                const controller = new AbortController();
+                const timeoutId = setTimeout(() => controller.abort(), 3000); // 3 second timeout
+                
                 const response = await fetch(`${API_URL}/api/history/${selectedConversation.sender_id}`, {
                     headers: { 'Authorization': `Bearer ${currentToken}` },
+                    signal: controller.signal
                 });
+                
+                clearTimeout(timeoutId);
 
                 if (response.ok) {
                     const data = await response.json();
