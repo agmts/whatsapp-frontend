@@ -1043,9 +1043,15 @@
         // Load conversations
         async function loadConversations() {
             try {
+                const controller = new AbortController();
+                const timeoutId = setTimeout(() => controller.abort(), 3000); // 3 second timeout
+                
                 const response = await fetch(`${API_URL}/api/conversations`, {
                     headers: { 'Authorization': `Bearer ${currentToken}` },
+                    signal: controller.signal
                 });
+                
+                clearTimeout(timeoutId);
 
                 if (response.ok) {
                     const conversations = await response.json();
