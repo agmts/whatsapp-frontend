@@ -1,0 +1,908 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WhatsApp Dashboard - Human Escalation System</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: #0F1419;
+            color: #E8E4DF;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        .container {
+            display: flex;
+            height: 100vh;
+        }
+
+        /* Login Screen */
+        .login-screen {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            background: linear-gradient(135deg, #0F1419 0%, #1a1f2e 100%);
+        }
+
+        .login-form {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(212, 175, 55, 0.2);
+            border-radius: 12px;
+            padding: 40px;
+            width: 100%;
+            max-width: 400px;
+            backdrop-filter: blur(10px);
+        }
+
+        .login-logo {
+            width: 60px;
+            height: 60px;
+            background: #D4AF37;
+            border-radius: 50%;
+            margin: 0 auto 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            font-weight: bold;
+            color: #0F1419;
+        }
+
+        .login-form h1 {
+            text-align: center;
+            font-size: 28px;
+            margin-bottom: 10px;
+            color: #E8E4DF;
+        }
+
+        .login-form p {
+            text-align: center;
+            color: #B8B4AF;
+            font-size: 14px;
+            margin-bottom: 30px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 12px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(212, 175, 55, 0.3);
+            border-radius: 6px;
+            color: #E8E4DF;
+            font-size: 14px;
+        }
+
+        .form-group input::placeholder {
+            color: #8B8680;
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: #D4AF37;
+            background: rgba(212, 175, 55, 0.1);
+        }
+
+        .login-form button {
+            width: 100%;
+            padding: 12px;
+            background: #D4AF37;
+            color: #0F1419;
+            border: none;
+            border-radius: 6px;
+            font-weight: 600;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.3s ease;
+        }
+
+        .login-form button:hover {
+            background: #E8C547;
+            transform: translateY(-2px);
+        }
+
+        .login-hint {
+            text-align: center;
+            color: #8B8680;
+            font-size: 12px;
+            margin-top: 20px;
+        }
+
+        /* Dashboard */
+        .dashboard {
+            display: flex;
+            width: 100%;
+            height: 100%;
+        }
+
+        .sidebar {
+            width: 300px;
+            background: rgba(15, 20, 25, 0.8);
+            border-right: 1px solid rgba(212, 175, 55, 0.1);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        .sidebar-header {
+            padding: 20px;
+            border-bottom: 1px solid rgba(212, 175, 55, 0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .sidebar-header h2 {
+            font-size: 16px;
+            font-weight: 600;
+        }
+
+        .logout-btn {
+            background: rgba(212, 175, 55, 0.2);
+            border: 1px solid rgba(212, 175, 55, 0.3);
+            color: #D4AF37;
+            padding: 6px 12px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 12px;
+            transition: all 0.3s ease;
+        }
+
+        .logout-btn:hover {
+            background: rgba(212, 175, 55, 0.3);
+        }
+
+        .conversations-list {
+            flex: 1;
+            overflow-y: auto;
+            padding: 10px;
+        }
+
+        .conversation-item {
+            padding: 15px;
+            margin-bottom: 8px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(212, 175, 55, 0.1);
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .conversation-item:hover {
+            background: rgba(212, 175, 55, 0.1);
+            border-color: rgba(212, 175, 55, 0.3);
+        }
+
+        .conversation-item.active {
+            background: rgba(212, 175, 55, 0.15);
+            border-color: #D4AF37;
+        }
+
+        /* ESCALATION: Red highlight for escalated conversations */
+        .conversation-item.escalated {
+            background: rgba(220, 38, 38, 0.2);
+            border-color: #DC2626;
+            animation: escalation-pulse 1s infinite;
+        }
+
+        @keyframes escalation-pulse {
+            0%, 100% {
+                box-shadow: 0 0 0 0 rgba(220, 38, 38, 0.4);
+            }
+            50% {
+                box-shadow: 0 0 0 4px rgba(220, 38, 38, 0.2);
+            }
+        }
+
+        .conversation-item.escalated:hover {
+            background: rgba(220, 38, 38, 0.3);
+        }
+
+        .conversation-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 5px;
+        }
+
+        .conversation-number {
+            font-weight: 600;
+            color: #E8E4DF;
+        }
+
+        /* ESCALATION: Badge for escalated conversations */
+        .escalation-badge {
+            background: #DC2626;
+            color: white;
+            font-size: 11px;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-weight: 600;
+        }
+
+        .conversation-preview {
+            font-size: 13px;
+            color: #B8B4AF;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        /* Main Chat Area */
+        .main-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            background: #0F1419;
+        }
+
+        .chat-header {
+            padding: 20px;
+            border-bottom: 1px solid rgba(212, 175, 55, 0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(15, 20, 25, 0.5);
+        }
+
+        .chat-header-info {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .chat-header-title {
+            font-size: 18px;
+            font-weight: 600;
+        }
+
+        /* ESCALATION: Takeover button */
+        .takeover-btn {
+            background: #D4AF37;
+            color: #0F1419;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 13px;
+            transition: all 0.3s ease;
+        }
+
+        .takeover-btn:hover {
+            background: #E8C547;
+            transform: translateY(-2px);
+        }
+
+        .takeover-btn.hidden {
+            display: none;
+        }
+
+        /* ESCALATION: Timer display */
+        .escalation-timer {
+            background: rgba(220, 38, 38, 0.2);
+            border: 1px solid #DC2626;
+            color: #FCA5A5;
+            padding: 8px 12px;
+            border-radius: 6px;
+            font-size: 13px;
+            font-weight: 600;
+        }
+
+        .messages-container {
+            flex: 1;
+            overflow-y: auto;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .empty-state {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100%;
+            color: #8B8680;
+            font-size: 16px;
+        }
+
+        .message {
+            display: flex;
+            margin-bottom: 10px;
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .message.user {
+            justify-content: flex-end;
+        }
+
+        .message.bot {
+            justify-content: flex-start;
+        }
+
+        .message-bubble {
+            max-width: 60%;
+            padding: 12px 16px;
+            border-radius: 12px;
+            word-wrap: break-word;
+            font-size: 14px;
+            line-height: 1.4;
+        }
+
+        .message.user .message-bubble {
+            background: #D4AF37;
+            color: #0F1419;
+            border-bottom-right-radius: 4px;
+        }
+
+        .message.bot .message-bubble {
+            background: rgba(255, 255, 255, 0.1);
+            color: #E8E4DF;
+            border: 1px solid rgba(212, 175, 55, 0.2);
+            border-bottom-left-radius: 4px;
+        }
+
+        .input-area {
+            padding: 20px;
+            border-top: 1px solid rgba(212, 175, 55, 0.1);
+            display: flex;
+            gap: 10px;
+        }
+
+        .input-area input {
+            flex: 1;
+            padding: 12px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(212, 175, 55, 0.2);
+            border-radius: 6px;
+            color: #E8E4DF;
+            font-size: 14px;
+        }
+
+        .input-area input::placeholder {
+            color: #8B8680;
+        }
+
+        .input-area input:focus {
+            outline: none;
+            border-color: #D4AF37;
+            background: rgba(212, 175, 55, 0.05);
+        }
+
+        .send-btn {
+            background: #D4AF37;
+            color: #0F1419;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .send-btn:hover {
+            background: #E8C547;
+            transform: translateY(-2px);
+        }
+
+        .send-btn:active {
+            transform: translateY(0);
+        }
+
+        /* Scrollbar styling */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: rgba(212, 175, 55, 0.3);
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: rgba(212, 175, 55, 0.5);
+        }
+    </style>
+</head>
+<body>
+    <div id="app"></div>
+
+    <audio id="ding-sound" preload="auto">
+        <source src="data:audio/wav;base64,UklGRiYAAABXQVZFZm10IBAAAAABAAEAQB8AAAB9AAACABAAZGF0YQIAAAAAAA==" type="audio/wav">
+    </audio>
+
+    <script>
+        // ============================================
+        // ESCALATION KEYWORD DETECTION
+        // ============================================
+        const ESCALATION_KEYWORDS = [
+            "speak to human",
+            "pass to human",
+            "agent",
+            "support team",
+            "human support",
+            "talk to someone",
+            "speak to someone",
+            "human agent",
+            "real person",
+            "customer service",
+            "representative"
+        ];
+
+        function detectEscalationKeywords(message) {
+            const lowerMessage = message.toLowerCase();
+            return ESCALATION_KEYWORDS.some(keyword => lowerMessage.includes(keyword));
+        }
+
+        // ============================================
+        // AUDIO ALERT
+        // ============================================
+        let dingInterval = null;
+
+        function playDingSound() {
+            const audio = document.getElementById('ding-sound');
+            audio.currentTime = 0;
+            audio.play().catch(e => console.log('Audio play failed:', e));
+        }
+
+        function startDingSound() {
+            if (dingInterval) clearInterval(dingInterval);
+            dingInterval = setInterval(() => {
+                playDingSound();
+            }, 5000);
+            playDingSound(); // Play immediately
+        }
+
+        function stopDingSound() {
+            if (dingInterval) {
+                clearInterval(dingInterval);
+                dingInterval = null;
+            }
+        }
+
+        // ============================================
+        // STATE MANAGEMENT
+        // ============================================
+        let appState = {
+            isLoggedIn: false,
+            currentUser: null,
+            selectedConversation: null,
+            conversations: [],
+            messages: {},
+            activeEscalations: {},
+            escalationTimers: {}
+        };
+
+        // ============================================
+        // DEMO DATA
+        // ============================================
+        const demoConversations = [
+            {
+                id: 1,
+                sender_id: "+1-555-0101",
+                last_message: "Hi, how are you doing?",
+                is_escalated: false,
+                escalation_id: null
+            },
+            {
+                id: 2,
+                sender_id: "+1-555-0102",
+                last_message: "Can you help me with this?",
+                is_escalated: false,
+                escalation_id: null
+            },
+            {
+                id: 3,
+                sender_id: "+1-555-0103",
+                last_message: "Thanks for your help!",
+                is_escalated: false,
+                escalation_id: null
+            },
+            {
+                id: 4,
+                sender_id: "+1-555-0104",
+                last_message: "See you tomorrow",
+                is_escalated: false,
+                escalation_id: null
+            }
+        ];
+
+        const demoMessages = {
+            1: [
+                { sender: "bot", content: "I'm doing great! How about you?" },
+                { sender: "user", content: "Hi, how are you doing?" },
+                { sender: "user", content: "Pretty good, just working on some projects" }
+            ],
+            2: [
+                { sender: "user", content: "Can you help me with this?" },
+                { sender: "bot", content: "Of course! What do you need help with?" },
+                { sender: "user", content: "I need to understand how to use the dashboard" },
+                { sender: "bot", content: "Sure! The dashboard shows all your conversations on the left, and you can select any to view the messages here." }
+            ],
+            3: [
+                { sender: "user", content: "Thanks for your help!" },
+                { sender: "bot", content: "You're welcome! Happy to assist." }
+            ],
+            4: [
+                { sender: "user", content: "See you tomorrow" },
+                { sender: "bot", content: "Sounds good! Have a great day!" }
+            ]
+        };
+
+        // ============================================
+        // API CALLS
+        // ============================================
+        async function escalateConversation(conversationId, senderID, triggerMessage) {
+            try {
+                const response = await fetch('/api/escalate', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${appState.currentUser}`
+                    },
+                    body: JSON.stringify({
+                        sender_id: senderID,
+                        conversation_id: conversationId,
+                        trigger_message: triggerMessage
+                    })
+                });
+
+                if (response.ok) {
+                    const data = await response.json();
+                    console.log('Escalation triggered:', data);
+                    
+                    // Update local state
+                    appState.activeEscalations[data.escalation_id] = {
+                        id: data.escalation_id,
+                        conversation_id: conversationId,
+                        status: data.escalation_status,
+                        timeout_seconds: data.timeout_seconds
+                    };
+
+                    // Start countdown timer
+                    startEscalationTimer(data.escalation_id, data.timeout_seconds);
+                    
+                    // Start ding sound
+                    startDingSound();
+                    
+                    // Update UI
+                    render();
+                }
+            } catch (error) {
+                console.error('Error escalating conversation:', error);
+            }
+        }
+
+        async function takeOverEscalation(escalationId, agentUsername) {
+            try {
+                const response = await fetch(`/api/escalation/${escalationId}/takeover`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${appState.currentUser}`
+                    },
+                    body: JSON.stringify({
+                        agent_username: agentUsername
+                    })
+                });
+
+                if (response.ok) {
+                    const data = await response.json();
+                    console.log('Escalation taken over:', data);
+                    
+                    // Update state
+                    delete appState.activeEscalations[escalationId];
+                    if (appState.escalationTimers[escalationId]) {
+                        clearInterval(appState.escalationTimers[escalationId]);
+                        delete appState.escalationTimers[escalationId];
+                    }
+                    
+                    // Stop ding sound if no more escalations
+                    if (Object.keys(appState.activeEscalations).length === 0) {
+                        stopDingSound();
+                    }
+                    
+                    // Update UI
+                    render();
+                }
+            } catch (error) {
+                console.error('Error taking over escalation:', error);
+            }
+        }
+
+        // ============================================
+        // ESCALATION TIMER
+        // ============================================
+        function startEscalationTimer(escalationId, timeoutSeconds) {
+            let remaining = timeoutSeconds;
+
+            appState.escalationTimers[escalationId] = setInterval(() => {
+                remaining--;
+                
+                if (remaining <= 0) {
+                    clearInterval(appState.escalationTimers[escalationId]);
+                    delete appState.escalationTimers[escalationId];
+                    
+                    // Update escalation status to timeout
+                    if (appState.activeEscalations[escalationId]) {
+                        appState.activeEscalations[escalationId].status = 'timeout';
+                    }
+                }
+                
+                render();
+            }, 1000);
+        }
+
+        function getEscalationTimeRemaining(escalationId) {
+            const escalation = appState.activeEscalations[escalationId];
+            if (!escalation) return null;
+
+            // Calculate remaining time based on timer
+            // This is a simplified version - in production, you'd track actual time
+            return remaining;
+        }
+
+        // ============================================
+        // UI RENDERING
+        // ============================================
+        function render() {
+            const app = document.getElementById('app');
+
+            if (!appState.isLoggedIn) {
+                app.innerHTML = renderLoginScreen();
+                attachLoginHandlers();
+            } else {
+                app.innerHTML = renderDashboard();
+                attachDashboardHandlers();
+            }
+        }
+
+        function renderLoginScreen() {
+            return `
+                <div class="login-screen">
+                    <div class="login-form">
+                        <div class="login-logo">💬</div>
+                        <h1>WhatsApp Dashboard</h1>
+                        <p>Human Escalation System</p>
+                        
+                        <div class="form-group">
+                            <label>Username</label>
+                            <input type="text" id="username" placeholder="admin" value="admin">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label>Password</label>
+                            <input type="password" id="password" placeholder="Enter password" value="CamelDelvey">
+                        </div>
+                        
+                        <button onclick="handleLogin()">Login</button>
+                        
+                        <div class="login-hint">
+                            Demo credentials: admin / CamelDelvey
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        function renderDashboard() {
+            const selectedConv = appState.selectedConversation;
+            const messages = selectedConv ? (appState.messages[selectedConv] || []) : [];
+            
+            // Check if selected conversation is escalated
+            const selectedConvData = appState.conversations.find(c => c.id === selectedConv);
+            const isEscalated = selectedConvData && selectedConvData.is_escalated;
+            const escalationId = selectedConvData && selectedConvData.escalation_id;
+
+            return `
+                <div class="container">
+                    <div class="sidebar">
+                        <div class="sidebar-header">
+                            <h2>Conversations</h2>
+                            <button class="logout-btn" onclick="handleLogout()">Logout</button>
+                        </div>
+                        <div class="conversations-list">
+                            ${appState.conversations.map(conv => `
+                                <div class="conversation-item ${conv.id === selectedConv ? 'active' : ''} ${conv.is_escalated ? 'escalated' : ''}" 
+                                     onclick="selectConversation(${conv.id})">
+                                    <div class="conversation-header">
+                                        <span class="conversation-number">${conv.sender_id}</span>
+                                        ${conv.is_escalated ? '<span class="escalation-badge">🚨 ESCALATED</span>' : ''}
+                                    </div>
+                                    <div class="conversation-preview">${conv.last_message}</div>
+                                </div>
+                            `).join('')}
+                        </div>
+                    </div>
+                    
+                    <div class="main-content">
+                        ${selectedConv ? `
+                            <div class="chat-header">
+                                <div class="chat-header-info">
+                                    <span class="chat-header-title">${selectedConvData.sender_id}</span>
+                                    ${isEscalated && escalationId ? `
+                                        <div class="escalation-timer">
+                                            ⏱️ Escalation Active
+                                        </div>
+                                    ` : ''}
+                                </div>
+                                ${isEscalated && escalationId ? `
+                                    <button class="takeover-btn" onclick="handleTakeover(${escalationId})">
+                                        Take Over
+                                    </button>
+                                ` : ''}
+                            </div>
+                            
+                            <div class="messages-container">
+                                ${messages.length > 0 ? messages.map(msg => `
+                                    <div class="message ${msg.sender}">
+                                        <div class="message-bubble">${msg.content}</div>
+                                    </div>
+                                `).join('') : '<div class="empty-state">No messages yet</div>'}
+                            </div>
+                            
+                            <div class="input-area">
+                                <input type="text" id="message-input" placeholder="Type a message..." onkeypress="handleMessageKeypress(event)">
+                                <button class="send-btn" onclick="handleSendMessage()">Send</button>
+                            </div>
+                        ` : `
+                            <div class="empty-state">
+                                Select a conversation to view messages
+                            </div>
+                        `}
+                    </div>
+                </div>
+            `;
+        }
+
+        // ============================================
+        // EVENT HANDLERS
+        // ============================================
+        function attachLoginHandlers() {
+            const passwordInput = document.getElementById('password');
+            if (passwordInput) {
+                passwordInput.addEventListener('keypress', (e) => {
+                    if (e.key === 'Enter') handleLogin();
+                });
+            }
+        }
+
+        function attachDashboardHandlers() {
+            const messageInput = document.getElementById('message-input');
+            if (messageInput) {
+                messageInput.focus();
+            }
+        }
+
+        function handleLogin() {
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+
+            if (username && password) {
+                appState.isLoggedIn = true;
+                appState.currentUser = username;
+                appState.conversations = JSON.parse(JSON.stringify(demoConversations));
+                appState.messages = JSON.parse(JSON.stringify(demoMessages));
+                render();
+            }
+        }
+
+        function handleLogout() {
+            appState.isLoggedIn = false;
+            appState.currentUser = null;
+            appState.selectedConversation = null;
+            appState.activeEscalations = {};
+            appState.escalationTimers = {};
+            stopDingSound();
+            render();
+        }
+
+        function selectConversation(convId) {
+            appState.selectedConversation = convId;
+            render();
+        }
+
+        function handleSendMessage() {
+            const input = document.getElementById('message-input');
+            const message = input.value.trim();
+
+            if (!message) return;
+
+            const convId = appState.selectedConversation;
+            if (!convId) return;
+
+            // Add message to state
+            if (!appState.messages[convId]) {
+                appState.messages[convId] = [];
+            }
+            appState.messages[convId].push({
+                sender: 'user',
+                content: message
+            });
+
+            // ============================================
+            // ESCALATION: Check for keywords
+            // ============================================
+            if (detectEscalationKeywords(message)) {
+                console.log('Escalation keyword detected!');
+                const conv = appState.conversations.find(c => c.id === convId);
+                
+                // Mark conversation as escalated
+                conv.is_escalated = true;
+                conv.escalation_id = Date.now(); // Use timestamp as demo escalation ID
+                
+                // Trigger escalation
+                escalateConversation(convId, conv.sender_id, message);
+            } else {
+                // Simulate bot response
+                setTimeout(() => {
+                    appState.messages[convId].push({
+                        sender: 'bot',
+                        content: 'Thank you for your message. How can I help you further?'
+                    });
+                    render();
+                }, 500);
+            }
+
+            input.value = '';
+            render();
+        }
+
+        function handleMessageKeypress(event) {
+            if (event.key === 'Enter') {
+                handleSendMessage();
+            }
+        }
+
+        function handleTakeover(escalationId) {
+            const username = appState.currentUser;
+            console.log(`${username} taking over escalation ${escalationId}`);
+            
+            takeOverEscalation(escalationId, username);
+        }
+
+        // ============================================
+        // INITIALIZATION
+        // ============================================
+        document.addEventListener('DOMContentLoaded', () => {
+            render();
+        });
+    </script>
+</body>
+</html>
