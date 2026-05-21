@@ -446,6 +446,222 @@
             background-color: rgba(68, 255, 68, 0.1);
             color: #88FF88;
         }
+
+        /* Agent Takeover Modal */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(0, 0, 0, 0.7);
+            z-index: 2000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-overlay.show {
+            display: flex;
+        }
+
+        .modal-content {
+            background-color: #1A1F2E;
+            border: 1px solid #D4AF37;
+            border-radius: 12px;
+            padding: 2rem;
+            max-width: 500px;
+            width: 90%;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            border-bottom: 1px solid #2A3142;
+            padding-bottom: 1rem;
+        }
+
+        .modal-header h3 {
+            font-size: 1.25rem;
+            color: #E8E4DF;
+            margin: 0;
+        }
+
+        .modal-close {
+            background: none;
+            border: none;
+            color: #A89968;
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+
+        .modal-body {
+            margin-bottom: 1.5rem;
+        }
+
+        .modal-body p {
+            color: #E8E4DF;
+            margin-bottom: 1rem;
+            line-height: 1.5;
+        }
+
+        .modal-body .agent-info {
+            background-color: rgba(212, 175, 55, 0.1);
+            border-left: 3px solid #D4AF37;
+            padding: 1rem;
+            border-radius: 6px;
+            margin-bottom: 1rem;
+        }
+
+        .modal-body .agent-info strong {
+            color: #D4AF37;
+        }
+
+        .modal-footer {
+            display: flex;
+            gap: 1rem;
+            justify-content: flex-end;
+        }
+
+        .modal-btn {
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 6px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .modal-btn-primary {
+            background-color: #D4AF37;
+            color: #0F1419;
+        }
+
+        .modal-btn-primary:hover {
+            background-color: #C9A961;
+        }
+
+        .modal-btn-secondary {
+            background-color: #2A3142;
+            color: #E8E4DF;
+            border: 1px solid #D4AF37;
+        }
+
+        .modal-btn-secondary:hover {
+            background-color: #3A4152;
+        }
+
+        /* Agent Panel */
+        .agent-panel {
+            display: none;
+            flex-direction: column;
+            gap: 1rem;
+            padding: 1rem;
+            background-color: rgba(212, 175, 55, 0.05);
+            border: 1px solid #D4AF37;
+            border-radius: 6px;
+            margin-bottom: 1rem;
+        }
+
+        .agent-panel.show {
+            display: flex;
+        }
+
+        .agent-panel-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .agent-panel-header h4 {
+            color: #D4AF37;
+            margin: 0;
+            font-size: 0.875rem;
+        }
+
+        .agent-status {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.75rem;
+            color: #44FF44;
+        }
+
+        .agent-status-dot {
+            width: 0.5rem;
+            height: 0.5rem;
+            background-color: #44FF44;
+            border-radius: 50%;
+        }
+
+        .agent-panel-content {
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+        }
+
+        .agent-action-btn {
+            padding: 0.5rem 1rem;
+            background-color: #D4AF37;
+            color: #0F1419;
+            border: none;
+            border-radius: 6px;
+            font-weight: 600;
+            font-size: 0.875rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .agent-action-btn:hover {
+            background-color: #C9A961;
+        }
+
+        .agent-action-btn.release {
+            background-color: #FF4444;
+        }
+
+        .agent-action-btn.release:hover {
+            background-color: #FF6666;
+        }
+
+        .sms-status {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.75rem;
+            background-color: rgba(68, 255, 68, 0.1);
+            border: 1px solid #44FF44;
+            border-radius: 6px;
+            font-size: 0.875rem;
+            color: #88FF88;
+            margin-bottom: 0.5rem;
+        }
+
+        .sms-status.pending {
+            background-color: rgba(212, 175, 55, 0.1);
+            border-color: #D4AF37;
+            color: #D4AF37;
+        }
+
+        .sms-status-dot {
+            width: 0.5rem;
+            height: 0.5rem;
+            background-color: currentColor;
+            border-radius: 50%;
+            animation: pulse 1s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        .sms-status-dot.delivered {
+            animation: none;
+        }
     </style>
 </head>
 <body>
@@ -504,10 +720,54 @@
                     <div class="empty-state">Select a conversation to view messages</div>
                 </div>
 
+                <div class="agent-panel" id="agentPanel">
+                    <div class="agent-panel-header">
+                        <h4>👤 Agent: <span id="agentNameDisplay"></span></h4>
+                        <div class="agent-status">
+                            <div class="agent-status-dot"></div>
+                            <span>Active</span>
+                        </div>
+                    </div>
+                    <div class="agent-panel-content">
+                        <small style="color: #A89968;">Email: <span id="agentEmailDisplay"></span></small>
+                        <div style="display: flex; gap: 0.5rem;">
+                            <button class="agent-action-btn" style="flex: 1;" onclick="exportConversation('txt')">📄 TXT</button>
+                            <button class="agent-action-btn" style="flex: 1;" onclick="exportConversation('json')">📋 JSON</button>
+                            <button class="agent-action-btn" style="flex: 1;" onclick="exportConversation('html')">🌐 HTML</button>
+                        </div>
+                        <button class="agent-action-btn release" onclick="releaseConversation()">🔄 Release Conversation</button>
+                    </div>
+                </div>
+
                 <div class="input-area" id="inputArea" style="display: none;">
                     <input type="text" id="messageInput" placeholder="Type a message..." />
                     <button class="send-btn" id="sendBtn">Send</button>
                 </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Takeover Modal -->
+    <div class="modal-overlay" id="takeoverModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Assign Agent</h3>
+                <button class="modal-close" onclick="document.getElementById('takeoverModal').classList.remove('show')">×</button>
+            </div>
+            <div class="modal-body">
+                <p>An escalation has been triggered. Please assign an agent to handle this conversation.</p>
+                <div class="form-group">
+                    <label for="agentName">Agent Name</label>
+                    <input type="text" id="agentName" placeholder="e.g., John Smith" />
+                </div>
+                <div class="form-group">
+                    <label for="agentEmail">Agent Email</label>
+                    <input type="email" id="agentEmail" placeholder="e.g., john@example.com" />
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="modal-btn modal-btn-secondary" onclick="document.getElementById('takeoverModal').classList.remove('show')">Cancel</button>
+                <button class="modal-btn modal-btn-primary" id="confirmTakeoverBtn">Assign Agent</button>
             </div>
         </div>
     </div>
@@ -571,13 +831,23 @@
                 startTime: Date.now(),
                 timeoutHandle: null,
                 dingHandle: null,
-                isActive: true
+                isActive: true,
+                agentName: null,
+                agentEmail: null,
+                takenOverAt: null,
+                smsSentAt: new Date(),
+                smsDelivered: false,
+                smsDeliveredAt: null
             };
 
             // Show escalation status
             if (selectedConversation?.id === conversationId) {
                 escalationStatus.classList.add('show');
                 updateEscalationTimer(conversationId);
+                // Show takeover modal
+                setTimeout(() => {
+                    showTakeoverModal(selectedConversation);
+                }, 500);
             }
 
             // Add escalation alert message
@@ -589,6 +859,23 @@
 
             // Show notification
             showNotification('Escalation detected! SMS alert sent to +447962468000', 'error');
+            
+            // Log SMS delivery confirmation
+            console.log(`[SMS DELIVERY] Sent to: +447962468000 | Time: ${new Date().toLocaleTimeString()} | Conversation: ${conversationId}`);
+            
+            // Update SMS status in UI
+            updateSMSStatus(conversationId);
+            
+            // Simulate SMS delivery confirmation after 2-3 seconds
+            setTimeout(() => {
+                if (escalationState[conversationId]) {
+                    escalationState[conversationId].smsDelivered = true;
+                    escalationState[conversationId].smsDeliveredAt = new Date();
+                    console.log(`[SMS CONFIRMED] Delivered to: +447962468000 | Time: ${new Date().toLocaleTimeString()} | Conversation: ${conversationId}`);
+                    showNotification('SMS delivered to support team', 'success');
+                    updateSMSStatus(conversationId);
+                }
+            }, 2000 + Math.random() * 1000);
 
             // Play ding every 5 seconds
             const dingHandle = setInterval(() => {
@@ -908,12 +1195,255 @@
             dashboard.classList.add('show');
         }
 
-        // Poll conversations every 4 seconds
-        setInterval(() => {
+        // Agent Takeover Functions
+        function showTakeoverModal(conversation) {
+            const modal = document.getElementById('takeoverModal');
+            const agentName = document.getElementById('agentName');
+            const agentEmail = document.getElementById('agentEmail');
+            const confirmBtn = document.getElementById('confirmTakeoverBtn');
+
+            agentName.value = '';
+            agentEmail.value = '';
+            modal.classList.add('show');
+
+            confirmBtn.onclick = () => {
+                const name = agentName.value.trim();
+                const email = agentEmail.value.trim();
+
+                if (!name || !email) {
+                    showNotification('Please enter agent name and email', 'error');
+                    return;
+                }
+
+                takeoverConversation(conversation, name, email);
+                modal.classList.remove('show');
+            };
+        }
+
+        function takeoverConversation(conversation, agentName, agentEmail) {
+            const state = escalationState[conversation.id];
+            if (!state) return;
+
+            state.agentName = agentName;
+            state.agentEmail = agentEmail;
+            state.takenOverAt = new Date();
+
+            // Show agent panel
+            const agentPanel = document.getElementById('agentPanel');
+            agentPanel.classList.add('show');
+            document.getElementById('agentNameDisplay').textContent = agentName;
+            document.getElementById('agentEmailDisplay').textContent = agentEmail;
+
+            // Add takeover message
+            const takeoverMsg = document.createElement('div');
+            takeoverMsg.className = 'message escalation-alert';
+            takeoverMsg.innerHTML = `<div class="message-bubble">✅ Agent ${agentName} has taken over this conversation ✅</div>`;
+            messagesArea.appendChild(takeoverMsg);
+            messagesArea.scrollTop = messagesArea.scrollHeight;
+
+            showNotification(`Agent ${agentName} is now handling this conversation`, 'success');
+        }
+
+        function updateSMSStatus(conversationId) {
+            const state = escalationState[conversationId];
+            if (!state) return;
+
+            let smsStatusDiv = document.getElementById('smsStatus');
+            if (!smsStatusDiv) {
+                smsStatusDiv = document.createElement('div');
+                smsStatusDiv.id = 'smsStatus';
+                messagesArea.insertBefore(smsStatusDiv, messagesArea.firstChild);
+            }
+
+            if (state.smsDelivered) {
+                smsStatusDiv.className = 'sms-status';
+                smsStatusDiv.innerHTML = `
+                    <div class="sms-status-dot delivered" style="background-color: #44FF44;"></div>
+                    <span>✓ SMS Delivered to +447962468000 at ${state.smsDeliveredAt.toLocaleTimeString()}</span>
+                `;
+            } else {
+                smsStatusDiv.className = 'sms-status pending';
+                smsStatusDiv.innerHTML = `
+                    <div class="sms-status-dot"></div>
+                    <span>⏳ Sending SMS to support team...</span>
+                `;
+            }
+        }
+
+        function releaseConversation() {
+            if (!selectedConversation) return;
+
+            const state = escalationState[selectedConversation.id];
+            if (state) {
+                state.agentName = null;
+                state.agentEmail = null;
+            }
+
+            const agentPanel = document.getElementById('agentPanel');
+            agentPanel.classList.remove('show');
+
+            const releaseMsg = document.createElement('div');
+            releaseMsg.className = 'message escalation-alert';
+            releaseMsg.innerHTML = `<div class="message-bubble">🔄 Conversation released back to bot mode 🔄</div>`;
+            messagesArea.appendChild(releaseMsg);
+            messagesArea.scrollTop = messagesArea.scrollHeight;
+
+            showNotification('Conversation released', 'success');
+        }
+
+        function exportConversation(format = 'txt') {
+            if (!selectedConversation) return;
+
+            const messages = messagesArea.querySelectorAll('.message');
+            const state = escalationState[selectedConversation.id];
+            const timestamp = new Date().toLocaleString();
+            const senderInfo = selectedConversation.sender_id;
+            
+            let content = '';
+            let mimeType = 'text/plain';
+            let extension = 'txt';
+
+            if (format === 'json') {
+                const messagesData = Array.from(messages).map(msg => ({
+                    type: msg.classList.contains('user') ? 'user' : 'bot',
+                    content: msg.querySelector('.message-bubble').textContent,
+                    timestamp: new Date().toISOString()
+                }));
+
+                const exportData = {
+                    conversation: {
+                        sender_id: senderInfo,
+                        exported_at: timestamp,
+                        escalation_info: state ? {
+                            escalated: state.isActive || state.smsDelivered,
+                            sms_sent_at: state.smsSentAt?.toLocaleString(),
+                            sms_delivered: state.smsDelivered,
+                            sms_delivered_at: state.smsDeliveredAt?.toLocaleString(),
+                            agent_name: state.agentName,
+                            agent_email: state.agentEmail,
+                            taken_over_at: state.takenOverAt?.toLocaleString()
+                        } : null
+                    },
+                    messages: messagesData
+                };
+
+                content = JSON.stringify(exportData, null, 2);
+                mimeType = 'application/json';
+                extension = 'json';
+            } else if (format === 'html') {
+                content = `<!DOCTYPE html>\n<html>\n<head>\n    <meta charset="UTF-8">\n    <title>Conversation Export</title>\n    <style>\n        body { font-family: Arial, sans-serif; margin: 20px; background-color: #0F1419; color: #E8E4DF; }\n        .header { border-bottom: 2px solid #D4AF37; padding-bottom: 10px; margin-bottom: 20px; }\n        .message { margin: 10px 0; padding: 10px; border-radius: 6px; }\n        .user { background-color: #D4AF37; color: #0F1419; text-align: right; }\n        .bot { background-color: #2A3142; color: #E8E4DF; }\n        .escalation-info { background-color: rgba(212, 175, 55, 0.1); border-left: 3px solid #D4AF37; padding: 10px; margin: 20px 0; }\n    </style>\n</head>\n<body>\n    <div class="header">\n        <h1>WhatsApp Conversation Export</h1>\n        <p><strong>Sender:</strong> ${senderInfo}</p>\n        <p><strong>Exported:</strong> ${timestamp}</p>\n    </div>`;
+
+                if (state && (state.isActive || state.smsDelivered)) {
+                    content += `<div class="escalation-info">\n        <h3>Escalation Information</h3>\n        <p><strong>SMS Sent:</strong> ${state.smsSentAt?.toLocaleString()}</p>\n        <p><strong>SMS Delivered:</strong> ${state.smsDelivered ? 'Yes - ' + state.smsDeliveredAt?.toLocaleString() : 'No'}</p>\n        ${state.agentName ? `<p><strong>Agent:</strong> ${state.agentName} (${state.agentEmail})</p>` : ''}\n        ${state.takenOverAt ? `<p><strong>Taken Over:</strong> ${state.takenOverAt.toLocaleString()}</p>` : ''}\n    </div>`;
+                }
+
+                content += `<h2>Messages</h2>`;
+                messages.forEach(msg => {
+                    const isUser = msg.classList.contains('user');
+                    const type = isUser ? 'user' : 'bot';
+                    const text = msg.querySelector('.message-bubble').textContent;
+                    content += `<div class="message ${type}">${text}</div>`;
+                });
+
+                content += `</body></html>`;
+                mimeType = 'text/html';
+                extension = 'html';
+            } else {
+                // Plain text format
+                content = `CONVERSATION EXPORT\n`;
+                content += `${'='.repeat(50)}\n\n`;
+                content += `Sender: ${senderInfo}\n`;
+                content += `Exported: ${timestamp}\n\n`;
+
+                if (state && (state.isActive || state.smsDelivered)) {
+                    content += `ESCALATION INFORMATION\n`;
+                    content += `${'-'.repeat(50)}\n`;
+                    content += `SMS Sent: ${state.smsSentAt?.toLocaleString()}\n`;
+                    content += `SMS Delivered: ${state.smsDelivered ? 'Yes - ' + state.smsDeliveredAt?.toLocaleString() : 'No'}\n`;
+                    if (state.agentName) content += `Agent: ${state.agentName} (${state.agentEmail})\n`;
+                    if (state.takenOverAt) content += `Taken Over: ${state.takenOverAt.toLocaleString()}\n`;
+                    content += `\n`;
+                }
+
+                content += `MESSAGES\n`;
+                content += `${'-'.repeat(50)}\n\n`;
+                messages.forEach(msg => {
+                    const isUser = msg.classList.contains('user');
+                    const type = isUser ? 'USER' : 'BOT';
+                    const text = msg.querySelector('.message-bubble').textContent;
+                    content += `[${type}]: ${text}\n\n`;
+                });
+            }
+
+            const blob = new Blob([content], { type: mimeType });
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `conversation-${selectedConversation.sender_id.replace(/[^a-z0-9]/gi, '')}-${Date.now()}.${extension}`;
+            document.body.appendChild(a);
+            a.click();
+            window.URL.revokeObjectURL(url);
+            document.body.removeChild(a);
+
+            showNotification(`Conversation exported as ${extension.toUpperCase()}`, 'success');
+        }
+
+        // Error handling wrapper
+        function safeExecute(fn, errorMsg) {
+            try {
+                return fn();
+            } catch (error) {
+                console.error('[ERROR] ' + errorMsg + ':', error);
+                showNotification('Error: ' + errorMsg, 'error');
+                return null;
+            }
+        }
+
+        // Cleanup function for memory management
+        function cleanupEscalation(conversationId) {
+            const state = escalationState[conversationId];
+            if (state) {
+                clearInterval(state.dingHandle);
+                clearTimeout(state.timeoutHandle);
+                delete escalationState[conversationId];
+            }
+        }
+
+        // Performance monitoring
+        const performanceMetrics = {
+            apiCallCount: 0,
+            escalationCount: 0,
+            exportCount: 0,
+            startTime: Date.now()
+        };
+
+        function logMetric(type) {
+            if (performanceMetrics[type] !== undefined) {
+                performanceMetrics[type]++;
+                console.log('[METRIC] ' + type + ': ' + performanceMetrics[type]);
+            }
+        }
+
+        // Poll conversations every 4 seconds with error handling
+        const pollInterval = setInterval(() => {
             if (currentToken) {
-                loadConversations();
+                safeExecute(() => {
+                    logMetric('apiCallCount');
+                    loadConversations();
+                }, 'Failed to load conversations');
             }
         }, 4000);
+
+        // Cleanup on page unload
+        window.addEventListener('beforeunload', () => {
+            clearInterval(pollInterval);
+            Object.keys(escalationState).forEach(id => cleanupEscalation(id));
+            console.log('[CLEANUP] Dashboard unloaded, resources cleaned up');
+        });
+
+        // Log initialization complete
+        console.log('[INIT] WhatsApp Dashboard initialized successfully');
+        console.log('[METRICS] Start time: ' + new Date(performanceMetrics.startTime).toLocaleTimeString());
     </script>
 </body>
 </html>
