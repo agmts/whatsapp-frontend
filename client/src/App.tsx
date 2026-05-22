@@ -113,7 +113,20 @@ export default function App() {
         h('p', { className: 'tagline' }, 'Professional Message Monitoring & Escalation System')
       ),
 
-      h('div', { className: 'login-features-hero' },
+      h('div', { 
+        className: 'login-features-hero',
+        style: {
+          background: 'linear-gradient(135deg, #B8D4E8 0%, rgba(184, 212, 232, 0.8) 100%)',
+          color: '#1A1F2E',
+          padding: '2rem',
+          borderRadius: '8px',
+          textAlign: 'center',
+          marginBottom: '2rem',
+          fontSize: '1.1rem',
+          fontWeight: '500',
+          letterSpacing: '0.5px'
+        }
+      },
         h('p', null, 'Professional Message Monitoring & Escalation System')
       ),
 
@@ -151,15 +164,23 @@ export default function App() {
         }, 'Sign In')
       ),
 
-      h('div', { className: 'login-features-section' },
+      h('div', { 
+        className: 'login-features-section',
+        style: {
+          background: 'linear-gradient(135deg, #B8D4E8 0%, rgba(184, 212, 232, 0.85) 100%)',
+          padding: '2rem',
+          borderRadius: '8px',
+          marginBottom: '2rem'
+        }
+      },
         h('div', { className: 'login-features' },
-          h('h3', null, 'Why Choose Our Dashboard?'),
-          h('ul', null,
-            h('li', null, '✓ Real-time message monitoring'),
-            h('li', null, '✓ Intelligent keyword detection'),
-            h('li', null, '✓ Instant SMS alerts'),
-            h('li', null, '✓ Professional-grade security'),
-            h('li', null, '✓ 24/7 monitoring capability')
+          h('h3', { style: { color: '#1A1F2E', fontSize: '1.5rem' } }, 'Why Choose Our Dashboard?'),
+          h('ul', { style: { listStyle: 'none', display: 'flex', flexDirection: 'column', gap: '0.75rem' } },
+            h('li', { style: { color: '#1A1F2E', fontSize: '0.95rem', letterSpacing: '0.3px', fontWeight: '500' } }, '✓ Real-time message monitoring'),
+            h('li', { style: { color: '#1A1F2E', fontSize: '0.95rem', letterSpacing: '0.3px', fontWeight: '500' } }, '✓ Intelligent keyword detection'),
+            h('li', { style: { color: '#1A1F2E', fontSize: '0.95rem', letterSpacing: '0.3px', fontWeight: '500' } }, '✓ Instant SMS alerts'),
+            h('li', { style: { color: '#1A1F2E', fontSize: '0.95rem', letterSpacing: '0.3px', fontWeight: '500' } }, '✓ Professional-grade security'),
+            h('li', { style: { color: '#1A1F2E', fontSize: '0.95rem', letterSpacing: '0.3px', fontWeight: '500' } }, '✓ 24/7 monitoring capability')
           )
         )
       )
