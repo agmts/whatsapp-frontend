@@ -1,5 +1,6 @@
 {
   "build": {
-    "builder": "nixpacks"
+    "builder": "nixpacks",
+    "buildCommand": "pnpm install && pnpm run build"
   }
 }
