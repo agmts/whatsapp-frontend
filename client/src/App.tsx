@@ -113,6 +113,10 @@ export default function App() {
         h('p', { className: 'tagline' }, 'Professional Message Monitoring & Escalation System')
       ),
 
+      h('div', { className: 'login-features-hero' },
+        h('p', null, 'Professional Message Monitoring & Escalation System')
+      ),
+
       h('form', {
         onSubmit: handleLogin,
         className: 'login-form'
@@ -147,14 +151,16 @@ export default function App() {
         }, 'Sign In')
       ),
 
-      h('div', { className: 'login-features' },
-        h('h3', null, 'Why Choose Our Dashboard?'),
-        h('ul', null,
-          h('li', null, '✓ Real-time message monitoring'),
-          h('li', null, '✓ Intelligent keyword detection'),
-          h('li', null, '✓ Instant SMS alerts'),
-          h('li', null, '✓ Professional-grade security'),
-          h('li', null, '✓ 24/7 monitoring capability')
+      h('div', { className: 'login-features-section' },
+        h('div', { className: 'login-features' },
+          h('h3', null, 'Why Choose Our Dashboard?'),
+          h('ul', null,
+            h('li', null, '✓ Real-time message monitoring'),
+            h('li', null, '✓ Intelligent keyword detection'),
+            h('li', null, '✓ Instant SMS alerts'),
+            h('li', null, '✓ Professional-grade security'),
+            h('li', null, '✓ 24/7 monitoring capability')
+          )
         )
       )
     ),
