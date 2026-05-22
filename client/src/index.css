@@ -1,11 +1,31 @@
 @import "tailwindcss";
 
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700;800&family=Inter:wght@300;400;500;600;700&display=swap');
+
 :root {
+  /* Primary Colors */
   --color-background: #0F1419;
   --color-foreground: #E8E4DF;
   --color-accent: #D4AF37;
   --color-secondary: #8B7355;
   --color-muted: #A89968;
+  
+  /* FidLaw Inspired Colors */
+  --color-navy-dark: #0F1419;
+  --color-navy-light: #1A1F2E;
+  --color-teal-light: #B8D4E8;
+  --color-gold: #D4AF37;
+  --color-cream: #E8E4DF;
+  --color-text-dark: #2C2C2C;
+  
+  /* Typography */
+  --font-display: 'Playfair Display', serif;
+  --font-body: 'Inter', sans-serif;
+  
+  /* Spacing & Effects */
+  --shadow-subtle: 0 2px 8px rgba(0, 0, 0, 0.1);
+  --shadow-medium: 0 4px 16px rgba(0, 0, 0, 0.15);
+  --shadow-gold: 0 0 20px rgba(212, 175, 55, 0.1);
 }
 
 * {
@@ -22,10 +42,408 @@ html, body {
 body {
   background-color: var(--color-background);
   color: var(--color-foreground);
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  font-family: var(--font-body);
+  letter-spacing: 0.3px;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-display);
+  font-weight: 700;
+  letter-spacing: 0.5px;
+}
+
+h1 {
+  font-size: 3rem;
+  font-weight: 800;
+  letter-spacing: 1px;
+  color: var(--color-gold);
+}
+
+h2 {
+  font-size: 2rem;
+  font-weight: 700;
+  margin-bottom: 1.5rem;
+  color: var(--color-cream);
+}
+
+h3 {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: var(--color-gold);
+}
+
+p {
+  font-size: 1rem;
+  line-height: 1.6;
+  color: var(--color-foreground);
+}
+
+/* Gold accent line */
+.accent-line {
+  height: 3px;
+  background: linear-gradient(90deg, var(--color-gold) 0%, transparent 100%);
+  margin: 1.5rem 0;
+  width: 80px;
 }
 
 #root {
   height: 100%;
   width: 100%;
+}
+
+/* Professional button styles */
+button {
+  font-family: var(--font-body);
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  transition: all 0.3s ease;
+  border: none;
+  cursor: pointer;
+}
+
+button:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-gold);
+}
+
+/* Gold accent button */
+.btn-gold {
+  background-color: var(--color-gold);
+  color: var(--color-text-dark);
+  padding: 0.75rem 2rem;
+  border-radius: 4px;
+}
+
+.btn-gold:hover {
+  background-color: #E5C158;
+}
+
+/* Professional card styles */
+.card {
+  background-color: var(--color-navy-light);
+  border-left: 4px solid var(--color-gold);
+  padding: 2rem;
+  border-radius: 4px;
+  box-shadow: var(--shadow-subtle);
+  transition: all 0.3s ease;
+}
+
+.card:hover {
+  box-shadow: var(--shadow-medium);
+  transform: translateY(-4px);
+}
+
+/* Light blue section background */
+.section-teal {
+  background-color: var(--color-teal-light);
+  color: var(--color-text-dark);
+  padding: 3rem 2rem;
+}
+
+/* Professional divider */
+.divider {
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--color-gold), transparent);
+  margin: 2rem 0;
+}
+
+/* ===== LOGIN PAGE ===== */
+.login-container {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background: linear-gradient(135deg, var(--color-navy-dark) 0%, var(--color-navy-light) 100%);
+  padding: 2rem;
+}
+
+.login-wrapper {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  max-width: 500px;
+  margin: 0 auto;
+  width: 100%;
+}
+
+.login-header {
+  text-align: center;
+  margin-bottom: 3rem;
+}
+
+.logo-large {
+  width: 120px;
+  height: 120px;
+  margin-bottom: 2rem;
+  filter: drop-shadow(0 4px 12px rgba(212, 175, 55, 0.2));
+}
+
+.tagline {
+  font-size: 0.95rem;
+  color: var(--color-muted);
+  margin-top: 1rem;
+  letter-spacing: 0.5px;
+}
+
+.login-form {
+  width: 100%;
+  background-color: var(--color-navy-light);
+  padding: 2.5rem;
+  border-radius: 8px;
+  box-shadow: var(--shadow-medium);
+  border-left: 4px solid var(--color-gold);
+  margin-bottom: 2rem;
+}
+
+.form-group {
+  margin-bottom: 1.5rem;
+}
+
+.form-group label {
+  display: block;
+  font-weight: 600;
+  color: var(--color-gold);
+  margin-bottom: 0.5rem;
+  font-size: 0.9rem;
+  letter-spacing: 0.5px;
+}
+
+.form-input {
+  width: 100%;
+  padding: 0.875rem 1rem;
+  background-color: var(--color-background);
+  border: 2px solid transparent;
+  border-radius: 4px;
+  color: var(--color-foreground);
+  font-family: var(--font-body);
+  font-size: 1rem;
+  transition: all 0.3s ease;
+}
+
+.form-input:focus {
+  outline: none;
+  border-color: var(--color-gold);
+  box-shadow: 0 0 0 3px rgba(212, 175, 55, 0.1);
+}
+
+.form-input::placeholder {
+  color: var(--color-muted);
+}
+
+.btn-large {
+  width: 100%;
+  padding: 1rem;
+  font-size: 1rem;
+  border-radius: 4px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+}
+
+.login-features {
+  background-color: var(--color-navy-light);
+  padding: 2rem;
+  border-radius: 8px;
+  border-left: 4px solid var(--color-gold);
+  margin-bottom: 2rem;
+}
+
+.login-features h3 {
+  margin-bottom: 1.5rem;
+  text-align: center;
+}
+
+.login-features ul {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.login-features li {
+  color: var(--color-foreground);
+  font-size: 0.95rem;
+  letter-spacing: 0.3px;
+}
+
+.login-footer {
+  text-align: center;
+  color: var(--color-muted);
+  font-size: 0.85rem;
+  padding-top: 2rem;
+  border-top: 1px solid rgba(212, 175, 55, 0.1);
+}
+
+/* ===== DASHBOARD PAGE ===== */
+.dashboard-container {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background: linear-gradient(135deg, var(--color-navy-dark) 0%, var(--color-navy-light) 100%);
+}
+
+.dashboard-header {
+  background-color: var(--color-navy-light);
+  border-bottom: 3px solid var(--color-gold);
+  padding: 1.5rem 2rem;
+  box-shadow: var(--shadow-medium);
+}
+
+.header-content {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 2rem;
+}
+
+.logo {
+  width: 50px;
+  height: 50px;
+  filter: drop-shadow(0 2px 8px rgba(212, 175, 55, 0.2));
+}
+
+.dashboard-header h1 {
+  flex: 1;
+  margin: 0;
+  font-size: 1.75rem;
+}
+
+.btn-logout {
+  background-color: var(--color-gold);
+  color: var(--color-text-dark);
+  padding: 0.6rem 1.5rem;
+  border-radius: 4px;
+  font-weight: 600;
+  font-size: 0.9rem;
+}
+
+.btn-logout:hover {
+  background-color: #E5C158;
+}
+
+.dashboard-main {
+  flex: 1;
+  max-width: 1200px;
+  margin: 0 auto;
+  width: 100%;
+  padding: 3rem 2rem;
+}
+
+.section-hero {
+  margin-bottom: 3rem;
+  text-align: center;
+}
+
+.hero-content h2 {
+  font-size: 2.5rem;
+  margin-bottom: 1rem;
+}
+
+.section-content {
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
+.monitoring-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 2rem;
+  margin-top: 2rem;
+}
+
+.card h4 {
+  font-size: 1.1rem;
+  margin-bottom: 0.5rem;
+  color: var(--color-gold);
+}
+
+.card p {
+  font-size: 0.9rem;
+  color: var(--color-foreground);
+  margin-bottom: 1rem;
+}
+
+.stat {
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: var(--color-gold);
+  margin-top: 1rem;
+}
+
+.section-features {
+  background-color: var(--color-navy-light);
+  padding: 3rem 2rem;
+  border-radius: 8px;
+  margin-top: 3rem;
+}
+
+.features-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 2rem;
+  margin-top: 2rem;
+}
+
+.feature-card {
+  background-color: var(--color-background);
+  padding: 2rem;
+  border-radius: 4px;
+  border-left: 4px solid var(--color-gold);
+  transition: all 0.3s ease;
+}
+
+.feature-card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-medium);
+}
+
+.feature-card h4 {
+  margin-bottom: 0.75rem;
+  color: var(--color-gold);
+}
+
+.feature-card p {
+  font-size: 0.95rem;
+  line-height: 1.5;
+}
+
+.dashboard-footer {
+  text-align: center;
+  padding: 2rem;
+  color: var(--color-muted);
+  font-size: 0.85rem;
+  border-top: 1px solid rgba(212, 175, 55, 0.1);
+  margin-top: auto;
+}
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 768px) {
+  h1 {
+    font-size: 2rem;
+  }
+  
+  h2 {
+    font-size: 1.5rem;
+  }
+  
+  .header-content {
+    flex-direction: column;
+    text-align: center;
+  }
+  
+  .dashboard-header h1 {
+    flex: none;
+  }
+  
+  .login-form,
+  .login-features {
+    padding: 1.5rem;
+  }
+  
+  .monitoring-grid,
+  .features-grid {
+    grid-template-columns: 1fr;
+  }
 }
